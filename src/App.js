@@ -21,15 +21,19 @@ const App = () => {
       const shouldRedirect = socialMediaDomains.some(domain => referrer.includes(domain));
 
       // if (shouldRedirect) {
-        // Create a hidden link and programmatically click it to open in default browser
-        debugger
-        const link = document.createElement('a');
-        link.href = destinationUrl;
-        link.target = '_blank';
-        link.rel = 'noopener noreferrer';
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
+        // For Android
+        if (/android/i.test(navigator.userAgent)) {
+          window.location.href = `intent://${destinationUrl.replace('https://', '')}#Intent;scheme=https;package=com.android.chrome;end;`;
+        } else {
+          // For iOS and other devices
+          const link = document.createElement('a');
+          link.href = destinationUrl;
+          link.target = '_blank';
+          link.rel = 'noopener noreferrer';
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
+        }
       // }
     };
 
